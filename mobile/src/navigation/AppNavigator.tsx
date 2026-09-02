@@ -12,14 +12,16 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import LoginScreen from "../screens/auth/LoginScreen";
-import HomeScreen from "../screens/home/HomeScreen";
+import MainTabNavigator from "./MainTabNavigator";
 import PlaceholderScreen from "../screens/shared/PlaceholderScreen";
 
 export type RootStackParamList = {
   Login: undefined;
-  Home: undefined;
+  Main: undefined;
   Register: { title?: string } | undefined;
   PasswordReset: { title?: string } | undefined;
+  /** Generic destination for any documented screen not built yet in this pass. */
+  Placeholder: { title: string };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -34,9 +36,9 @@ export default function AppNavigator() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ title: "RoomieSync", headerBackVisible: false }}
+          name="Main"
+          component={MainTabNavigator}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Register"
@@ -47,6 +49,11 @@ export default function AppNavigator() {
           name="PasswordReset"
           component={PlaceholderScreen}
           options={{ title: "Password reset" }}
+        />
+        <Stack.Screen
+          name="Placeholder"
+          component={PlaceholderScreen}
+          options={({ route }) => ({ title: route.params.title })}
         />
       </Stack.Navigator>
     </NavigationContainer>

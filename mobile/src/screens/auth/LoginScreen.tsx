@@ -22,11 +22,13 @@ import { Button } from "../../components/Button";
 import { TextField } from "../../components/TextField";
 import { colors, fontSize, radius, spacing } from "../../theme";
 import * as authService from "../../services/authService";
+import { useAuth } from "../../context/AuthContext";
 import type { RootStackParamList } from "../../navigation/AppNavigator";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 
 export default function LoginScreen({ navigation }: Props) {
+  const { signIn } = useAuth();
   const [email, setEmail] = useState("221592280@tut4life.ac.za");
   const [password, setPassword] = useState("");
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>(
@@ -55,8 +57,9 @@ export default function LoginScreen({ navigation }: Props) {
 
     setIsSubmitting(true);
     try {
-      await authService.login(email, password);
-      navigation.reset({ index: 0, routes: [{ name: "Home" }] });
+      const user = await authService.login(email, password);
+      signIn(user);
+      navigation.reset({ index: 0, routes: [{ name: "Main" }] });
     } catch (err) {
       if (err instanceof authService.AuthError) {
         setFormError(err.message);

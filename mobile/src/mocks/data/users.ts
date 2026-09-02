@@ -11,6 +11,7 @@ import { User } from "../../types/user";
 export const MOCK_DEMO_USER: User = {
   id: "mock-user-1",
   fullName: "BT Masilela",
+  initials: "BT",
   email: "221592280@tut4life.ac.za",
   studentNumber: "221592280",
   university: "Tshwane University of Technology",

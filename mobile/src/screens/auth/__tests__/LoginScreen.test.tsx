@@ -2,6 +2,7 @@ import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react-native";
 
 import LoginScreen from "../LoginScreen";
+import { AuthProvider } from "../../../context/AuthContext";
 import { MOCK_DEMO_PASSWORD, MOCK_DEMO_USER } from "../../../mocks/data/users";
 
 async function renderLoginScreen() {
@@ -10,7 +11,9 @@ async function renderLoginScreen() {
     navigate: jest.fn(),
   } as any;
   const utils = await render(
-    <LoginScreen navigation={navigation} route={{} as any} />
+    <AuthProvider>
+      <LoginScreen navigation={navigation} route={{} as any} />
+    </AuthProvider>
   );
   return { ...utils, navigation };
 }
@@ -49,7 +52,7 @@ describe("LoginScreen", () => {
     });
   });
 
-  it("navigates to Home on successful mock sign-in", async () => {
+  it("navigates to Main on successful mock sign-in", async () => {
     const { getByTestId, navigation } = await renderLoginScreen();
 
     await fireEvent.changeText(getByTestId("login-email-input"), MOCK_DEMO_USER.email);
@@ -62,7 +65,7 @@ describe("LoginScreen", () => {
     await waitFor(() => {
       expect(navigation.reset).toHaveBeenCalledWith({
         index: 0,
-        routes: [{ name: "Home" }],
+        routes: [{ name: "Main" }],
       });
     });
   });
